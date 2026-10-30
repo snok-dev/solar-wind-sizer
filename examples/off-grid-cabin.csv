@@ -1,0 +1,6 @@
+name,watts,quantity,hours_per_day
+LED bulb,6,6,5
+12V fridge,45,1,24
+Laptop,60,1,4
+Water pump,300,1,0.5
+Phone charger,10,2,2

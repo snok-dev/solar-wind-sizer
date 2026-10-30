@@ -1,0 +1,10 @@
+name,watts,quantity,hours_per_day,on_at_once
+LED bulb,8,12,5,
+Fridge freezer (A-rated),60,1,24,
+Television,80,1,5,
+Wi-Fi router,10,1,24,
+Laptop,60,2,6,
+Washing machine,500,1,1,0
+Kettle,3000,1,0.3,
+Microwave,900,1,0.3,0
+Phone charger,10,3,2,
