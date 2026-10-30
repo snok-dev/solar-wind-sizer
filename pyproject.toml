@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solarwind"
+version = "0.1.0"
+description = "Size solar panels, wind turbines, batteries and inverters for homes and small businesses."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "snok-dev" }]
+requires-python = ">=3.9"
+dependencies = []
+keywords = ["solar", "wind", "renewable energy", "battery", "off-grid", "sizing"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+solarwind = "solarwind.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
