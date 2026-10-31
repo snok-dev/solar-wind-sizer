@@ -16,6 +16,8 @@ LOCATIONS = {
     "belfast": {"annual": 2.5, "low": 0.5, "high": 4.5},
     "edinburgh": {"annual": 2.5, "low": 0.4, "high": 4.6},
     "glasgow": {"annual": 2.4, "low": 0.4, "high": 4.5},
+    "birmingham": {"annual": 2.7, "low": 0.7, "high": 4.8},
+    "bristol": {"annual": 2.9, "low": 0.8, "high": 5.0},
     "lagos": {"annual": 4.6, "low": 3.5, "high": 5.5},
     "abuja": {"annual": 5.5, "low": 4.4, "high": 6.4},
 }
