@@ -32,3 +32,7 @@ def test_unknown_location_lists_known_ones():
 def test_zero_sun_hours_is_rejected():
     with pytest.raises(ValueError):
         solar.array_size_kw(5, 0)
+
+
+def test_glasgow_is_a_known_location():
+    assert solar.peak_sun_hours("Glasgow") == 2.4
