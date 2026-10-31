@@ -3,7 +3,7 @@
 Planned work, roughly from easiest to hardest. Each item is (or will be) a GitHub issue.
 
 ## Good first issues
-- [ ] **More locations:** add Birmingham, Bristol, Glasgow, Newcastle, Port Harcourt and Kano to `LOCATIONS`
+- [x] **More locations:** add Birmingham, Bristol, Newcastle, Port Harcourt and Kano to `LOCATIONS` (Glasgow was already present)
 - [ ] **Battery autonomy days:** add `--autonomy-days` so off-grid users can size for cloudy spells
 - [ ] **`loads` command:** print a table of each appliance's daily energy and share of the total
 - [ ] **Markdown report:** add `--markdown` output for pasting into documents

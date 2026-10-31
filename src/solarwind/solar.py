@@ -13,11 +13,16 @@ LOCATIONS = {
     "london": {"annual": 2.9, "low": 0.8, "high": 5.0},
     "cardiff": {"annual": 3.0, "low": 0.9, "high": 5.1},
     "manchester": {"annual": 2.6, "low": 0.6, "high": 4.6},
+    "birmingham": {"annual": 2.7, "low": 0.7, "high": 4.9},
+    "bristol": {"annual": 2.9, "low": 0.8, "high": 5.0},
+    "newcastle": {"annual": 2.5, "low": 0.5, "high": 4.6},
     "belfast": {"annual": 2.5, "low": 0.5, "high": 4.5},
     "edinburgh": {"annual": 2.5, "low": 0.4, "high": 4.6},
     "glasgow": {"annual": 2.4, "low": 0.4, "high": 4.5},
     "lagos": {"annual": 4.6, "low": 3.5, "high": 5.5},
     "abuja": {"annual": 5.5, "low": 4.4, "high": 6.4},
+    "portharcourt": {"annual": 4.2, "low": 3.4, "high": 5.2},
+    "kano": {"annual": 5.8, "low": 4.6, "high": 6.6},
 }
 
 # Share of the panels' rated output that reaches your sockets after losses
