@@ -36,3 +36,11 @@ def test_zero_sun_hours_is_rejected():
 
 def test_glasgow_is_a_known_location():
     assert solar.peak_sun_hours("Glasgow") == 2.4
+
+
+def test_new_locations_have_peak_sun_hours():
+    assert solar.peak_sun_hours("Birmingham") == 2.7
+    assert solar.peak_sun_hours("Bristol") == 2.9
+    assert solar.peak_sun_hours("Newcastle") == 2.5
+    assert solar.peak_sun_hours("portharcourt") == 4.2
+    assert solar.peak_sun_hours("Kano") == 5.8

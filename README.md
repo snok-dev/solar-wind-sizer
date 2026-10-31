@@ -67,7 +67,7 @@ solarwind solar --daily-kwh 8 --location london --season low  # darkest month
 solarwind solar --daily-kwh 8 --sun-hours 3.2                # your own figure
 ```
 
-Built-in locations: London, Cardiff, Manchester, Belfast, Edinburgh, Lagos, Abuja.
+Built-in locations: London, Cardiff, Manchester, Birmingham, Bristol, Newcastle, Belfast, Edinburgh, Glasgow, Lagos, Abuja, Port Harcourt, Kano.
 
 ### Estimate a wind turbine's output
 
