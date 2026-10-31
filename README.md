@@ -78,7 +78,11 @@ solarwind wind --mean-speed 5 --rated-watts 1000 --rated-speed 11
 solarwind wind --mean-speed 4.5 --measured-height 2 --hub-height 10 --terrain rural --rated-watts 1000 --rated-speed 11
 ```
 
-Add `--json` to any command for machine-readable output.
+Add `--json` to any command for machine-readable output, or `--markdown` for a paste-ready table:
+
+```bash
+solarwind solar --daily-kwh 8 --location london --markdown
+```
 
 ### As a Python library
 

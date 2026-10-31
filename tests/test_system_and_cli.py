@@ -39,6 +39,29 @@ def test_cli_wind_text(capsys):
     assert "Output per year" in capsys.readouterr().out
 
 
+def test_cli_solar_markdown(capsys):
+    assert main(["solar", "--daily-kwh", "8", "--sun-hours", "3.2", "--markdown"]) == 0
+    output = capsys.readouterr().out
+    assert output.startswith("## Solar array\n")
+    assert "| Item | Value |" in output
+    assert "| Energy needed per day | 8.0 kWh |" in output
+
+
+def test_cli_wind_markdown_includes_low_wind_note(capsys):
+    assert main(["wind", "--mean-speed", "4", "--rated-watts", "1000", "--rated-speed", "11", "--markdown"]) == 0
+    output = capsys.readouterr().out
+    assert output.startswith("## Wind turbine\n")
+    assert "| Note | Sites averaging under about 4.5 m/s rarely make a turbine worthwhile. |" in output
+
+
+def test_cli_system_markdown(capsys):
+    assert main(["system", "--loads", str(EXAMPLE), "--location", "london", "--markdown"]) == 0
+    output = capsys.readouterr().out
+    assert output.startswith("## System for London\n")
+    assert "| Appliances |" in output
+    assert "| Solar array |" in output
+
+
 def test_cli_reports_missing_file(capsys):
     assert main(["system", "--loads", "missing.csv"]) == 1
     assert "error:" in capsys.readouterr().err

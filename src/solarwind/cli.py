@@ -17,6 +17,25 @@ def print_rows(title, rows):
         print(f"{label.ljust(width)}  {value}")
 
 
+def print_markdown(title, rows):
+    """Print report rows as a Markdown table."""
+    def cell(value):
+        return str(value).replace("\\", "\\\\").replace("|", "\\|").replace("\n", "<br>")
+
+    print(f"## {cell(title)}\n")
+    print("| Item | Value |")
+    print("| --- | --- |")
+    for label, value in rows:
+        print(f"| {cell(label)} | {cell(value)} |")
+
+
+def print_report(title, rows, markdown=False):
+    if markdown:
+        print_markdown(title, rows)
+    else:
+        print_rows(title, rows)
+
+
 def run_solar(args):
     sun_hours = args.sun_hours or solar.peak_sun_hours(args.location, args.season)
     array_kw = solar.array_size_kw(args.daily_kwh, sun_hours)
@@ -32,7 +51,7 @@ def run_solar(args):
     if args.json:
         print(json.dumps(result, indent=2))
         return
-    print_rows(
+    print_report(
         "Solar array",
         [
             ("Energy needed per day", f"{args.daily_kwh:.1f} kWh"),
@@ -41,6 +60,7 @@ def run_solar(args):
             ("Panels", f"{panels} x {args.panel_watts} W"),
             ("Output per year", f"about {result['annual_kwh']:,} kWh"),
         ],
+        args.markdown,
     )
 
 
@@ -58,17 +78,21 @@ def run_wind(args):
     if args.json:
         print(json.dumps(result, indent=2))
         return
-    print_rows(
+    rows = [
+        ("Average wind at hub", f"{mean_speed:.1f} m/s"),
+        ("Turbine", f"{args.rated_watts:,.0f} W rated at {args.rated_speed} m/s"),
+        ("Output per year", f"about {result['annual_kwh']:,} kWh"),
+        ("Average per day", f"{result['daily_kwh']} kWh"),
+        ("Capacity factor", f"{result['capacity_factor'] * 100:.0f}%"),
+    ]
+    if args.markdown and mean_speed < 4.5:
+        rows.append(("Note", "Sites averaging under about 4.5 m/s rarely make a turbine worthwhile."))
+    print_report(
         "Wind turbine",
-        [
-            ("Average wind at hub", f"{mean_speed:.1f} m/s"),
-            ("Turbine", f"{args.rated_watts:,.0f} W rated at {args.rated_speed} m/s"),
-            ("Output per year", f"about {result['annual_kwh']:,} kWh"),
-            ("Average per day", f"{result['daily_kwh']} kWh"),
-            ("Capacity factor", f"{result['capacity_factor'] * 100:.0f}%"),
-        ],
+        rows,
+        args.markdown,
     )
-    if mean_speed < 4.5:
+    if not args.markdown and mean_speed < 4.5:
         print("\nNote: sites averaging under about 4.5 m/s rarely make a turbine worthwhile.")
 
 
@@ -101,8 +125,13 @@ def run_system(args):
         ("Solar needed", f"{design.solar_daily_kwh:.1f} kWh/day"),
         ("Solar array", f"{design.solar_array_kw:.2f} kW ({design.solar_panels} x {args.panel_watts} W)"),
     ]
-    print_rows(f"System for {args.location.title()}", rows)
-    if design.winter_shortfall_kwh > 0:
+    if args.markdown and design.winter_shortfall_kwh > 0:
+        rows.append((
+            "Winter shortfall",
+            f"About {design.winter_shortfall_kwh:.1f} kWh/day; plan for grid backup, a generator or more panels.",
+        ))
+    print_report(f"System for {args.location.title()}", rows, args.markdown)
+    if design.winter_shortfall_kwh > 0 and not args.markdown:
         print(f"\nIn the darkest month you may be short by about {design.winter_shortfall_kwh:.1f} kWh/day:"
               " plan for grid backup, a generator or more panels.")
 
@@ -118,7 +147,7 @@ def build_parser():
     p.add_argument("--season", default="annual", choices=["annual", "low", "high"], help="size for the average, worst or best month")
     p.add_argument("--sun-hours", type=float, help="your own peak sun hours (overrides --location)")
     p.add_argument("--panel-watts", type=float, default=450)
-    p.add_argument("--json", action="store_true", help="print the result as JSON")
+    add_output_options(p)
     p.set_defaults(func=run_solar)
 
     p = sub.add_parser("wind", help="estimate a wind turbine's yearly output")
@@ -131,7 +160,7 @@ def build_parser():
     p.add_argument("--measured-height", type=float, help="height (m) where the wind speed was measured")
     p.add_argument("--hub-height", type=float, help="height (m) of the turbine hub")
     p.add_argument("--terrain", default="open", choices=list(wind.TERRAIN_SHEAR))
-    p.add_argument("--json", action="store_true")
+    add_output_options(p)
     p.set_defaults(func=run_wind)
 
     p = sub.add_parser("system", help="size a full system from a CSV of appliances")
@@ -143,9 +172,16 @@ def build_parser():
     p.add_argument("--wind-speed", type=float, help="average wind speed at hub height, to include a turbine")
     p.add_argument("--turbine-watts", type=float, default=1000)
     p.add_argument("--turbine-rated-speed", type=float, default=11)
-    p.add_argument("--json", action="store_true")
+    add_output_options(p)
     p.set_defaults(func=run_system)
     return parser
+
+
+def add_output_options(parser):
+    """Add mutually exclusive machine-readable and paste-ready report options."""
+    output = parser.add_mutually_exclusive_group()
+    output.add_argument("--json", action="store_true", help="print the result as JSON")
+    output.add_argument("--markdown", action="store_true", help="print the result as a Markdown table")
 
 
 def main(argv=None):
