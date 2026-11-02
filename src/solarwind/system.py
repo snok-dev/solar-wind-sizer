@@ -31,6 +31,7 @@ def design_system(
     night_fraction=0.6,
     depth_of_discharge=0.8,
     turbine=None,
+    autonomy_days=None,
 ):
     """Work out inverter, battery, wind and solar sizes for a set of appliances.
 
@@ -38,6 +39,8 @@ def design_system(
     which the battery has to store.
     turbine: optional dict with mean_speed, rated_watts and rated_speed (plus
     optional cut_in and cut_out) for a wind turbine at the site.
+    autonomy_days: if set, size the battery to run everything for this many
+    days with no charging at all (overrides night_fraction).
     """
     daily = loads.daily_energy_kwh(appliances)
     peak = loads.peak_load_watts(appliances)
@@ -45,7 +48,8 @@ def design_system(
     kva_needed = inverter.required_kva(peak)
     kva = inverter.standard_inverter_kva(kva_needed)
 
-    battery_kwh = battery.battery_capacity_kwh(daily * night_fraction, depth_of_discharge)
+    energy_to_store = battery.energy_to_store_kwh(daily, night_fraction, autonomy_days)
+    battery_kwh = battery.battery_capacity_kwh(energy_to_store, depth_of_discharge)
     voltage = battery.suggest_system_voltage(battery_kwh)
 
     wind_daily = 0.0

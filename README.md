@@ -57,6 +57,7 @@ Microwave,900,1,0.3,0
 ```bash
 solarwind system --loads examples/uk-home.csv --location london
 solarwind system --loads examples/off-grid-cabin.csv --location edinburgh --wind-speed 6 --turbine-watts 400 --turbine-rated-speed 12
+solarwind system --loads examples/off-grid-cabin.csv --location edinburgh --autonomy-days 3   # off-grid: battery lasts 3 days without charging
 ```
 
 ### Size a solar array

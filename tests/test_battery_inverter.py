@@ -24,3 +24,17 @@ def test_required_kva_includes_headroom():
 def test_standard_size_rounds_up():
     assert inverter.standard_inverter_kva(3.125) == 3.5
     assert inverter.standard_inverter_kva(99) is None
+
+
+def test_energy_to_store_uses_night_fraction_by_default():
+    assert battery.energy_to_store_kwh(10) == pytest.approx(6)
+
+
+def test_energy_to_store_for_autonomy_days():
+    assert battery.energy_to_store_kwh(10, autonomy_days=3) == pytest.approx(30)
+
+
+def test_autonomy_days_must_be_positive():
+    with pytest.raises(ValueError):
+        battery.energy_to_store_kwh(10, autonomy_days=0)
+        

@@ -108,6 +108,7 @@ def run_system(args):
         night_fraction=args.night_fraction,
         depth_of_discharge=args.dod,
         turbine=turbine,
+        autonomy_days=args.autonomy_days,
     )
     if args.json:
         print(json.dumps({k: round(v, 2) if isinstance(v, float) else v for k, v in design.to_dict().items()}, indent=2))
@@ -169,6 +170,7 @@ def build_parser():
     p.add_argument("--panel-watts", type=float, default=450)
     p.add_argument("--night-fraction", type=float, default=0.6, help="share of daily energy used after dark (0-1)")
     p.add_argument("--dod", type=float, default=0.8, help="battery depth of discharge (0-1)")
+    p.add_argument("--autonomy-days", type=float, help="size the battery to run for this many days with no charging (off-grid)")
     p.add_argument("--wind-speed", type=float, help="average wind speed at hub height, to include a turbine")
     p.add_argument("--turbine-watts", type=float, default=1000)
     p.add_argument("--turbine-rated-speed", type=float, default=11)
