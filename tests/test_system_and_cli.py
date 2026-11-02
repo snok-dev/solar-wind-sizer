@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from solarwind.cli import main
 from solarwind.loads import read_loads_csv
 from solarwind.system import design_system
@@ -26,6 +28,12 @@ def test_tiny_winter_shortfall_is_ignored():
     design = design_system(appliances, "edinburgh", turbine={"mean_speed": 6, "rated_watts": 400, "rated_speed": 12})
     assert design.winter_shortfall_kwh == 0
 
+
+def test_autonomy_days_makes_a_bigger_battery():
+    appliances = read_loads_csv(EXAMPLE)
+    normal = design_system(appliances, "london")
+    off_grid = design_system(appliances, "london", autonomy_days=3)
+    assert off_grid.battery_kwh == pytest.approx(normal.battery_kwh * 3 / 0.6)
 
 def test_cli_system_json(capsys):
     assert main(["system", "--loads", str(EXAMPLE), "--location", "london", "--json"]) == 0
