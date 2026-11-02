@@ -31,7 +31,7 @@ def design_system(
     night_fraction=0.6,
     depth_of_discharge=0.8,
     turbine=None,
-    autonomy_days=None
+    autonomy_days=None,
 ):
     """Work out inverter, battery, wind and solar sizes for a set of appliances.
 

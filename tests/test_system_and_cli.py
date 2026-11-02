@@ -35,6 +35,7 @@ def test_autonomy_days_makes_a_bigger_battery():
     off_grid = design_system(appliances, "london", autonomy_days=3)
     assert off_grid.battery_kwh == pytest.approx(normal.battery_kwh * 3 / 0.6)
 
+
 def test_cli_system_json(capsys):
     assert main(["system", "--loads", str(EXAMPLE), "--location", "london", "--json"]) == 0
     result = json.loads(capsys.readouterr().out)
