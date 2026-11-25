@@ -68,7 +68,7 @@ solarwind solar --daily-kwh 8 --location london --season low  # darkest month
 solarwind solar --daily-kwh 8 --sun-hours 3.2                # your own figure
 ```
 
-Built-in locations: London, Cardiff, Manchester, Belfast, Edinburgh, Lagos, Abuja.
+Built-in locations: London, Cardiff, Birmingham, Bristol, Manchester, Belfast, Edinburgh, Glasgow, Lagos, Abuja.
 
 ### Estimate a wind turbine's output
 
@@ -101,7 +101,7 @@ panels = solar.panels_needed(solar.array_size_kw(6, solar.peak_sun_hours("cardif
 | Solar | Array kW = daily kWh ÷ (peak sun hours × 0.8 performance ratio) |
 | Wind speed with height | Power law with a terrain-dependent shear exponent |
 | Wind output | Simple cubic power curve × Rayleigh wind-speed distribution, minus 25% real-world losses |
-| Battery | Night-time energy ÷ (depth of discharge × efficiency) |
+| Battery | Night-time energy (or daily energy × autonomy days) ÷ (depth of discharge × efficiency) |
 | Inverter | Peak load × 1.25 headroom ÷ 0.8 power factor, rounded up to a standard size |
 
 Peak sun hours are approximate guides for a south-facing panel. See [`src/solarwind/solar.py`](src/solarwind/solar.py).
