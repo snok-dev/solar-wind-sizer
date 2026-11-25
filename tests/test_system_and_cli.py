@@ -74,3 +74,15 @@ def test_cli_system_markdown(capsys):
 def test_cli_reports_missing_file(capsys):
     assert main(["system", "--loads", "missing.csv"]) == 1
     assert "error:" in capsys.readouterr().err
+
+
+def test_cli_rejects_zero_sun_hours_instead_of_using_the_location(capsys):
+    # --sun-hours 0 used to be treated as "not given" and silently fell back to London.
+    assert main(["solar", "--daily-kwh", "8", "--sun-hours", "0"]) == 1
+    assert "sun hours" in capsys.readouterr().err
+
+
+def test_cli_needs_both_heights_to_adjust_wind_speed(capsys):
+    # --measured-height on its own used to be silently ignored.
+    assert main(["wind", "--mean-speed", "5", "--rated-watts", "1000", "--rated-speed", "11", "--measured-height", "2"]) == 1
+    assert "--hub-height" in capsys.readouterr().err
