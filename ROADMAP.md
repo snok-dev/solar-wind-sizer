@@ -3,10 +3,10 @@
 Planned work, roughly from easiest to hardest. Each item is (or will be) a GitHub issue.
 
 ## Good first issues
-- [ ] **More locations:** add Birmingham, Bristol, Glasgow, Newcastle, Port Harcourt and Kano to `LOCATIONS`
-- [ ] **Battery autonomy days:** add `--autonomy-days` so off-grid users can size for cloudy spells
+- [ ] **More locations:** add Newcastle, Port Harcourt and Kano to `LOCATIONS` (Birmingham, Bristol and Glasgow are done)
+- [x] **Battery autonomy days:** add `--autonomy-days` so off-grid users can size for cloudy spells
 - [ ] **`loads` command:** print a table of each appliance's daily energy and share of the total
-- [ ] **Markdown report:** add `--markdown` output for pasting into documents
+- [x] **Markdown report:** add `--markdown` output for pasting into documents
 
 ## Medium
 - [ ] **Monthly solar table:** store 12 monthly sun-hour values per location and print output month by month
