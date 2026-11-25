@@ -37,7 +37,10 @@ def print_report(title, rows, markdown=False):
 
 
 def run_solar(args):
-    sun_hours = args.sun_hours or solar.peak_sun_hours(args.location, args.season)
+    if args.sun_hours is not None:
+        sun_hours = args.sun_hours
+    else:
+        sun_hours = solar.peak_sun_hours(args.location, args.season)
     array_kw = solar.array_size_kw(args.daily_kwh, sun_hours)
     panels = solar.panels_needed(array_kw, args.panel_watts)
     result = {
@@ -66,7 +69,9 @@ def run_solar(args):
 
 def run_wind(args):
     mean_speed = args.mean_speed
-    if args.measured_height and args.hub_height:
+    if (args.measured_height is None) != (args.hub_height is None):
+        raise ValueError("--measured-height and --hub-height must be given together")
+    if args.measured_height is not None:
         mean_speed = wind.wind_speed_at_height(mean_speed, args.measured_height, args.hub_height, args.terrain)
     kwh = wind.annual_energy_kwh(mean_speed, args.rated_watts, args.rated_speed, args.cut_in, args.cut_out, args.losses)
     result = {
