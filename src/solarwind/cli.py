@@ -1,4 +1,4 @@
-"""Command-line interface: `solarwind solar ...`, `solarwind wind ...`, `solarwind system ...`."""
+"""Command-line interface: `solarwind solar ...`, `solarwind wind ...`, `solarwind loads ...`, `solarwind system ...`."""
 
 import argparse
 import json
@@ -96,6 +96,23 @@ def run_wind(args):
         print("\nNote: sites averaging under about 4.5 m/s rarely make a turbine worthwhile.")
 
 
+def run_loads(args):
+    appliances = loads.read_loads_csv(args.loads)
+    breakdown = loads.energy_breakdown(appliances)
+    total_kwh = loads.daily_energy_kwh(appliances)
+    if args.json:
+        print(json.dumps({
+            "daily_kwh": round(total_kwh, 2),
+            "appliances": [
+                {"name": a.name, "daily_kwh": round(kwh, 2), "share": round(share, 3)} for a, kwh, share in breakdown
+            ],
+        }, indent=2))
+        return
+    rows = [(a.name, f"{kwh:.2f} kWh/day ({share * 100:.0f}%)") for a, kwh, share in breakdown]
+    rows.append(("Total", f"{total_kwh:.2f} kWh/day"))
+    print_report("Energy by appliance", rows, args.markdown)
+
+
 def run_system(args):
     appliances = loads.read_loads_csv(args.loads)
     turbine = None
@@ -163,6 +180,11 @@ def build_parser():
     p.add_argument("--terrain", default="open", choices=list(wind.TERRAIN_SHEAR))
     add_output_options(p)
     p.set_defaults(func=run_wind)
+
+    p = sub.add_parser("loads", help="show each appliance's daily energy and share of the total")
+    p.add_argument("--loads", required=True, help="CSV file with name, watts, quantity, hours_per_day")
+    add_output_options(p)
+    p.set_defaults(func=run_loads)
 
     p = sub.add_parser("system", help="size a full system from a CSV of appliances")
     p.add_argument("--loads", required=True, help="CSV file with name, watts, quantity, hours_per_day")
