@@ -1,6 +1,6 @@
 import pytest
 
-from solarwind.loads import Appliance, daily_energy_kwh, peak_load_watts, read_loads_csv
+from solarwind.loads import Appliance, daily_energy_kwh, energy_breakdown, peak_load_watts, read_loads_csv
 
 
 def test_daily_energy_adds_up_all_appliances():
@@ -45,3 +45,21 @@ def test_read_loads_csv_reports_the_bad_line(tmp_path):
     path.write_text("name,watts,quantity,hours_per_day\nBulb,eight,1,5\n")
     with pytest.raises(ValueError, match="line 2"):
         read_loads_csv(path)
+
+
+def test_energy_breakdown_is_biggest_first_and_shares_add_up():
+    appliances = [Appliance("Bulb", 10, quantity=5, hours_per_day=4), Appliance("Fridge", 100, hours_per_day=24)]
+    breakdown = energy_breakdown(appliances)
+    assert [a.name for a, _, _ in breakdown] == ["Fridge", "Bulb"]
+    assert breakdown[0][1] == pytest.approx(2.4)
+    assert breakdown[0][2] == pytest.approx(2.4 / 2.6)
+    assert sum(share for _, _, share in breakdown) == pytest.approx(1)
+
+
+def test_energy_breakdown_with_no_energy_use_does_not_divide_by_zero():
+    breakdown = energy_breakdown([Appliance("Spare", 100, quantity=0, hours_per_day=2)])
+    assert breakdown[0][1:] == (0, 0)
+
+
+def test_energy_breakdown_of_nothing_is_empty():
+    assert energy_breakdown([]) == []

@@ -79,6 +79,14 @@ solarwind wind --mean-speed 5 --rated-watts 1000 --rated-speed 11
 solarwind wind --mean-speed 4.5 --measured-height 2 --hub-height 10 --terrain rural --rated-watts 1000 --rated-speed 11
 ```
 
+### See where your energy goes
+
+```bash
+solarwind loads --loads examples/uk-home.csv
+```
+
+Lists each appliance's daily kWh and share of the total, biggest first, so you can see what's worth cutting before you buy panels.
+
 Add `--json` to any command for machine-readable output, or `--markdown` for a paste-ready table:
 
 ```bash

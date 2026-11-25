@@ -74,3 +74,17 @@ def test_cli_system_markdown(capsys):
 def test_cli_reports_missing_file(capsys):
     assert main(["system", "--loads", "missing.csv"]) == 1
     assert "error:" in capsys.readouterr().err
+
+
+def test_cli_loads_json_lists_every_appliance(capsys):
+    assert main(["loads", "--loads", str(EXAMPLE), "--json"]) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert len(result["appliances"]) == len(read_loads_csv(EXAMPLE))
+    assert sum(a["share"] for a in result["appliances"]) == pytest.approx(1, abs=0.01)
+
+
+def test_cli_loads_markdown(capsys):
+    assert main(["loads", "--loads", str(EXAMPLE), "--markdown"]) == 0
+    out = capsys.readouterr().out
+    assert out.startswith("## Energy by appliance")
+    assert "| Total |" in out

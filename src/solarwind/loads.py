@@ -57,6 +57,17 @@ def daily_energy_kwh(appliances):
     return sum(a.daily_wh for a in appliances) / 1000
 
 
+def energy_breakdown(appliances):
+    """Each appliance's daily energy and share of the total, biggest first.
+
+    Returns a list of (appliance, daily_kwh, share) where share is 0-1.
+    If nothing uses any energy, every share is 0.
+    """
+    total_kwh = daily_energy_kwh(appliances)
+    rows = [(a, a.daily_wh / 1000, a.daily_wh / 1000 / total_kwh if total_kwh else 0.0) for a in appliances]
+    return sorted(rows, key=lambda row: row[1], reverse=True)
+
+
 def read_loads_csv(path):
     """Read appliances from a CSV file.
 
